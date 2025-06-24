@@ -33,7 +33,20 @@ async function run() {
       const parcelCollection = client.db('ProFastDb').collection('parcels');
       
 
+  
 
+      // 🚀 Add this route inside the run() function, after parcelCollection is declared
+      app.post("/parcels", async (req, res) => {
+        try {
+          const parcel = req.body
+          const result = await parcelCollection.insertOne(parcel);
+
+          res.status(201).send(result)
+        } catch (error) {
+          res.status(500).json({ error: error.message });
+        }
+      });
+      
 
 
 
