@@ -47,7 +47,27 @@ async function run() {
         }
       });
       
+// parcel get by email or not email all data
+      app.get("/parcels", async (req, res) => {
+        try {
+          const userEmail = req.query.email;
 
+          let query = {};
+          if (userEmail) {
+            query.user_email = userEmail
+          }
+
+          const parcels = await parcelCollection
+            .find(query)
+            .sort({ creation_date: -1 }) // latest first
+            .toArray();
+
+          res.send(parcels);
+        } catch (error) {
+          res.status(500).json({ error: error.message });
+        }
+      });
+      
 
 
 
