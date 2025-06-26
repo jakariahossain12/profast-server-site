@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = process.env.MONGODB_URL;
   
 
@@ -67,8 +67,34 @@ async function run() {
           res.status(500).json({ error: error.message });
         }
       });
+    
+      app.get("/parcels/:id", async (req, res) => {
+        try {
+          const id = req.params.id;
+          const query = { _id: new ObjectId(id) };
+
+          const result = await parcelCollection.findOne(query);
+
+          res.send(result);
+        } catch (error) {
+          res.status(500).json({ error: error.message });
+        }
+      });
       
 
+    
+      app.delete("/parcels/:id", async (req, res) => {
+        try {
+          const id = req.params.id;
+          const query = {_id: new ObjectId(id)}
+
+          const result = await parcelCollection.deleteOne(query);
+
+          res.send(result)
+        } catch (error) {
+          res.status(500).json({ error: error.message });
+        }
+      });
 
 
 
